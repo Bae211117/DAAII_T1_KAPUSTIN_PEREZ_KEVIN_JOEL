@@ -32,10 +32,19 @@ public class LoginController {
         return "auth/registro";
     }
 
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String nomusuario = auth.getName();
+        Usuario usuario = usuarioService.buscarUsuarioXNomUsuario(nomusuario);
+        model.addAttribute("nomusuario", usuario.getNomusuario());
+        return "layout";
+    }
+
     @PostMapping("/registro")
     public String registro(@ModelAttribute Usuario usuario, Model model) {
         usuarioService.guardarUsuario(usuario);
-        model.addAttribute("message", "Registro Realizado");
+        model.addAttribute("message", "Usuario registrado exitosamente");
         model.addAttribute("usuario", new Usuario());
         return "auth/registro";
     }
